@@ -1,0 +1,20 @@
+# Create app + service principal for OIDC only (no client secret, no RBAC assignment)
+$appId = az ad sp create-for-rbac `
+  --name "my-gh-oidc-demo-sp" `
+  --skip-assignment `
+  --create-password false `
+  --query appId -o tsv
+
+echo $appId
+
+# Add GitHub OIDC federated credential to that app registration
+az ad app federated-credential create --id $appId --parameters credential.json
+
+
+az role assignment create `
+    --assignee-object-id $(az ad sp show --id $appId --query id -o tsv) `
+    --assignee-principal-type ServicePrincipal `
+    --role Contributor `
+    --scope $(az group show --name rg-az-400-eshoponweb --query id -o tsv)
+
+az ad sp show --id $appId --query id -o tsv
