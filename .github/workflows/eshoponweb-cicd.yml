@@ -1,5 +1,9 @@
 name: eShopOnWeb Build and Test
 
+on:
+  # manual trigger with parameters
+  workflow_dispatch
+  
 #Triggers (uncomment line below to use it)
 #on: [push, workflow_dispatch]
 
