@@ -27,3 +27,11 @@ jobs:
         with:
           name: test-results
           path: ./TestResults/**/*.trx
+      
+      - name: Publish test report
+        if: success() || failure()
+        uses: dorny/test-reporter@v1
+        with:
+          name: .NET Tests
+          path: ./TestResults/**/*.trx
+          reporter: dotnet-trx
